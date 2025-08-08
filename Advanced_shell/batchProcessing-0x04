@@ -24,15 +24,19 @@ fetch_pokemon() {
     fi
 }
 
-# Launch processes in background and track PIDs
+# Launch processes in background
 for pokemon in "${pokemon_list[@]}"; do
     fetch_pokemon "$pokemon" &
-    pids+=($!) # Store the PID of the background job
+    pids+=($!)  # Store PID
 done
+
+# Show running background jobs
+echo "Current background jobs:"
+jobs
 
 # Wait for each process, kill if it takes too long
 for pid in "${pids[@]}"; do
-    # Wait for process with timeout (10s example)
+    # Timeout watcher (10 seconds example)
     ( sleep 10 && kill -0 "$pid" 2>/dev/null && kill "$pid" && echo "Process $pid killed due to timeout" ) &
     watchdog_pid=$!
 
