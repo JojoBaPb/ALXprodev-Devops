@@ -6,6 +6,9 @@ mkdir -p pokemon_data
 # List of Pokémon
 pokemon_list=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
 
+# Array to store process IDs
+pids=()
+
 # Fetch function
 fetch_pokemon() {
     local pokemon=$1
@@ -21,11 +24,20 @@ fetch_pokemon() {
     fi
 }
 
-# Loop through Pokémon list and fetch in parallel
+# Launch processes in background and track PIDs
 for pokemon in "${pokemon_list[@]}"; do
     fetch_pokemon "$pokemon" &
+    pids+=($!) # Store the PID of the background job
 done
 
-# Wait for all background jobs to finish
-wait
+# Wait for each process, kill if it takes too long
+for pid in "${pids[@]}"; do
+    # Wait for process with timeout (10s example)
+    ( sleep 10 && kill -0 "$pid" 2>/dev/null && kill "$pid" && echo "Process $pid killed due to timeout" ) &
+    watchdog_pid=$!
+
+    wait "$pid" 2>/dev/null
+    kill "$watchdog_pid" 2>/dev/null
+done
+
 echo "All Pokémon data fetched successfully."
