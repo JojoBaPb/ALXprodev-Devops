@@ -11,16 +11,3 @@ The main goal is to demonstrate mastery of:
 - Data summarization and reporting
 
 ---
-
-## 📂 Project Structure
-
-ALXprodev-Devops/
-│
-├── Advanced_shell/
-│ ├── apiAutomation-0x00
-│ ├── data_extraction_automation-0x01
-│ ├── batchProcessing-0x02
-│ ├── summaryData-0x03
-│ ├── batchProcessing-0x04
-│ └── README.md
-└── README.md
